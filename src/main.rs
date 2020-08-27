@@ -2,6 +2,7 @@ use itertools::unfold;
 use num_rational::Rational;
 use take_until::TakeUntilExt;
 mod can;
+mod svg;
 
 fn main() {
     let denom = 5;
@@ -18,10 +19,10 @@ fn main() {
     let can_contents_weight_g = 400;
     let empty_can_weight_g = 52;
 
-    let weight = |remaining: Rational| -> String {
-        if remaining == *can::FULL {
+    let weight = |remaining: &Rational| -> String {
+        if *remaining == *can::FULL {
             String::from("Full")
-        } else if remaining == *can::EMPTY {
+        } else if *remaining == *can::EMPTY {
             String::from("Empty")
         } else {
             format!(
@@ -33,10 +34,14 @@ fn main() {
         }
     };
 
+    let labels: Vec<String> = day_fractions.iter().map(weight).collect();
+
     println!("Starting from a full can:");
-    for day in day_fractions {
+    for day in &day_fractions {
         println!("{:?} {}", day, weight(day));
     }
+
+    svg::draw("image.svg", &day_fractions, &labels);
 }
 
 fn dogfood(reduction: Rational) -> Vec<Rational> {

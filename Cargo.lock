@@ -13,6 +13,7 @@ dependencies = [
  "itertools",
  "lazy_static",
  "num-rational",
+ "svg",
  "take-until",
 ]
 
@@ -78,6 +79,12 @@ checksum = "ac267bcc07f48ee5f8935ab0d24f316fb722d7a1292e2913f0cc196b29ffd611"
 dependencies = [
  "autocfg",
 ]
+
+[[package]]
+name = "svg"
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0b65a64d32a41db2a8081aa03c1ccca26f246ff681add693f8b01307b137da79"
 
 [[package]]
 name = "take-until"
