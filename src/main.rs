@@ -63,6 +63,3 @@ fn dogfood(reduction: Rational) -> Vec<Rational> {
     .take(100) // safety net on how long this runs for
     .collect()
 }
-
-// https://www.vecteezy.com/vector-art/149462-free-tin-box-template-vector-collection
-// <a href="https://www.vecteezy.com/free-vector/tin-can">Tin Can Vectors by Vecteezy</a>
