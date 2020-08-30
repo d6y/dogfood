@@ -1,11 +1,10 @@
-use super::can::FULL;
-use num_rational::Rational;
 use svg::node;
 use svg::node::element::path::Data;
 use svg::node::element::Path;
 use svg::Document;
+use super::Fraction;
 
-pub fn draw(filename: &str, days: &Vec<Rational>, labels: &Vec<String>) {
+pub fn draw(filename: &str, days: &Vec<Fraction>, labels: &Vec<String>) {
     let h_margin = 0;
     let v_margin = 50;
 
@@ -58,7 +57,7 @@ pub fn draw(filename: &str, days: &Vec<Rational>, labels: &Vec<String>) {
         ),
     );
 
-    let mut am = *FULL;
+    let mut am = Fraction::new(1,1);
     for (i, day) in days.iter().enumerate() {
         let am_origin = day_origin(i, true);
         let am_can = can(am_origin);
