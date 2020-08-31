@@ -1,9 +1,12 @@
 use itertools::unfold;
 use num_rational::Ratio;
 use take_until::TakeUntilExt;
+mod diagram;
 mod svg;
+use diagram::Diagram;
 
 type Fraction = Ratio<u16>;
+type Gram = u16;
 
 fn main() {
     let numer = 1;
@@ -13,44 +16,30 @@ fn main() {
     assert!(numer > 0); // must take a reducing step
     assert!(numer <= denom); // must be a fraction of the whole
 
+    let can_contents: Gram = 400; // how much food in a can?
+    let empty_can: Gram = 52; // what does an empty can weigh?
+
     let reduction = Fraction::new(numer, denom);
 
     let day_fractions = dogfood(reduction);
 
+    println!("Starting with a full can...");
     for day in &day_fractions {
         println!("{}", day);
     }
 
-    // let can_contents_weight_g = 400;
-    // let empty_can_weight_g = 52;
+    let row = |weight| -> Diagram { Diagram::can().above(Diagram::label(weight)) };
 
-    // let weight = |remaining: &Rational| -> String {
-    //     if *remaining == *can::FULL {
-    //         String::from("Full")
-    //     } else if *remaining == *can::EMPTY {
-    //         String::from("Empty")
-    //     } else {
-    //         format!(
-    //             "{:.0}g",
-    //             empty_can_weight_g as f32
-    //                 + can_contents_weight_g as f32
-    //                     * (*remaining.numer() as f32 / *remaining.denom() as f32)
-    //         )
-    //     }
-    // };
+    let diagram = weight_labels(&day_fractions, can_contents, empty_can)
+        .iter()
+        .fold(Diagram::new(), |diagram, weight| diagram.above(row(weight)));
 
-    // let labels: Vec<String> = day_fractions.iter().map(weight).collect();
-
-    // println!("Starting from a full can:");
-    // for day in &day_fractions {
-    //     println!("{:?} {}", day, weight(day));
-    // }
+    dbg!(diagram);
 
     // svg::draw("image.svg", &day_fractions, &labels);
 }
 
 fn dogfood(reduction: Fraction) -> Vec<Fraction> {
-
     let full_can = Fraction::new(1, 1);
     let empty_can = Fraction::new(0, 1);
 
@@ -73,4 +62,20 @@ fn dogfood(reduction: Fraction) -> Vec<Fraction> {
     .take_until(is_empty)
     .take(100) // safety net on how long this runs for
     .collect()
+}
+
+fn weight_labels(days: &[Fraction], can_contents: Gram, empty_can: Gram) -> Vec<String> {
+    let weight = |remaining: &Fraction| -> String {
+        if *remaining.numer() == 0 {
+            String::from("Empty")
+        } else {
+            format!(
+                "{:.0}g",
+                empty_can as f32
+                    + can_contents as f32 * (*remaining.numer() as f32 / *remaining.denom() as f32)
+            )
+        }
+    };
+
+    days.iter().map(weight).collect()
 }
