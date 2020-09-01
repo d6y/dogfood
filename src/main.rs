@@ -37,21 +37,21 @@ fn main() {
 
     let day_fractions = dogfood(reduction);
 
+    let labeller = weight_labeller(args.can_contents, args.empty_can);
+    let weight_labels: Vec<String> = day_fractions.iter().map(labeller).collect();
+
     println!("Starting with a full can...");
-    for (i, day) in day_fractions.iter().enumerate() {
-        println!("End of day {}: {} left over", 1 + i, day);
+    for ((i, day), label) in day_fractions.iter().enumerate().zip(weight_labels.iter()) {
+        println!("End of day {}: {} left over, {}", 1 + i, day, label);
     }
 
     if let Some(filename) = args.svg {
-        // Convert the fractions into a series of stacked cans,
-        // each labelled with the end-of-day weight.
-        let labeller = weight_labeller(args.can_contents, args.empty_can);
-        let weight_labels = day_fractions.iter().map(labeller);
-
+        // Convert the fractions into a series of stacked cans, each labelled with the end-of-day weight.
         let row = |weight| -> Diagram { Diagram::can().above(Diagram::label(weight)) };
 
-        let diagram =
-            &weight_labels.fold(Diagram::new(), |diagram, weight| diagram.above(row(weight)));
+        let diagram = weight_labels
+            .into_iter()
+            .fold(Diagram::new(), |diagram, weight| diagram.above(row(weight)));
 
         // Convert the diagram into an SVG file:
         svg::save(&diagram, &filename)
