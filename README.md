@@ -24,6 +24,8 @@ $ ./target/release/dogfood 2 3 --svg two_thirds.svg
 $ open -a Firefox two_thirds.svg
 ```
 
-...and so :tada:
+Like this:
 
 <img src="two_thirds.svg" width="150">
+
+Just gorgeous :tada:
