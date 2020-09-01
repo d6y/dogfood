@@ -4,7 +4,7 @@ Calculates the expected weight of a can at the end of the day, if you (or your d
 
 # What?
 
-For example, let's say you eat 2/3rs of a 400g can each day:
+For example, let's say you eat 2/3rds of a 400g can each day:
 
 ```
 $ cargo build --release --quiet
@@ -14,6 +14,12 @@ End of day 1: 1/3 left over, 185g
 End of day 2: 2/3 left over, 319g
 End of day 3: 0 left over, Empty
 ```
+
+
+> New to Rust?  Hello! :wave:
+>  
+> To get started, install [Rust](https://www.rust-lang.org/tools/install) to get access to `cargo`, which is the Rust build tool.
+
 
 # Bonus
 

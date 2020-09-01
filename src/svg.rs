@@ -34,27 +34,26 @@ impl Canvas {
     }
 
     fn blank() -> Canvas {
-        Canvas {
-            x: 0,
-            y: 0,
-            width: 0,
-            height: 0,
-        }
+        Canvas::new(0, 0, 0, 0)
     }
 
     fn grow(self, w: i16, h: i16) -> Canvas {
-        Canvas::new(self.x, self.y, self.width + w, self.height + h)
+        Canvas {
+            width: self.width + w,
+            height: self.height + h,
+            ..self
+        }
     }
 
     fn reposition(self, x: i16, y: i16) -> Canvas {
-        Canvas::new(x, y, self.width, self.height)
+        Canvas { x, y, ..self }
     }
 }
 
 fn draw(diagram: &Diagram, canvas: Canvas, document: Document) -> (Canvas, Document) {
     match diagram {
         Diagram::Blank => (canvas, document),
-        Diagram::Can => rect(canvas, document),
+        Diagram::Can => rectangle(canvas, document),
         Diagram::Label { text } => self::text(canvas, document, text),
         Diagram::Stack { top, bottom } => {
             let (canvas, document) = draw(&top, canvas, document);
@@ -79,9 +78,9 @@ fn text(canvas: Canvas, document: Document, label: &str) -> (Canvas, Document) {
     (canvas.grow(0, text_height * 2), document.add(node))
 }
 
-fn rect(canvas: Canvas, document: Document) -> (Canvas, Document) {
-    let width = 20;
-    let height = 40;
+fn rectangle(canvas: Canvas, document: Document) -> (Canvas, Document) {
+    let width = 50;
+    let height = 60;
 
     let data = Data::new()
         .move_to((canvas.x, canvas.y))
@@ -93,7 +92,7 @@ fn rect(canvas: Canvas, document: Document) -> (Canvas, Document) {
     let path = Path::new()
         .set("fill", "none")
         .set("stroke", "black")
-        .set("stroke-width", 2)
+        .set("stroke-width", 3)
         .set("d", data);
 
     (canvas.grow(width, height), document.add(path))

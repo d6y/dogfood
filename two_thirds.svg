@@ -1,14 +1,14 @@
-<svg viewBox="-10, -10, 60, 240" xmlns="http://www.w3.org/2000/svg">
-<path d="M0,0 l20,0 l0,40 l-20,0 z" fill="none" stroke="black" stroke-width="2"/>
-<text x="0" y="60">
+<svg viewBox="-10, -10, 150, 300" xmlns="http://www.w3.org/2000/svg">
+<path d="M0,0 l50,0 l0,60 l-50,0 z" fill="none" stroke="black" stroke-width="3"/>
+<text x="0" y="80">
 185g
 </text>
-<path d="M0,80 l20,0 l0,40 l-20,0 z" fill="none" stroke="black" stroke-width="2"/>
-<text x="0" y="140">
+<path d="M0,100 l50,0 l0,60 l-50,0 z" fill="none" stroke="black" stroke-width="3"/>
+<text x="0" y="180">
 319g
 </text>
-<path d="M0,160 l20,0 l0,40 l-20,0 z" fill="none" stroke="black" stroke-width="2"/>
-<text x="0" y="220">
+<path d="M0,200 l50,0 l0,60 l-50,0 z" fill="none" stroke="black" stroke-width="3"/>
+<text x="0" y="280">
 Empty
 </text>
 </svg>
