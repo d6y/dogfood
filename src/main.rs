@@ -28,11 +28,12 @@ fn main() {
         println!("{}", day);
     }
 
+    let labeller = weight_labeller(can_contents, empty_can);
+    let weight_labels = day_fractions.iter().map(labeller);
+
     let row = |weight| -> Diagram { Diagram::can().above(Diagram::label(weight)) };
 
-    let diagram = weight_labels(&day_fractions, can_contents, empty_can)
-        .iter()
-        .fold(Diagram::new(), |diagram, weight| diagram.above(row(weight)));
+    let diagram = &weight_labels.fold(Diagram::new(), |diagram, weight| diagram.above(row(weight)));
 
     dbg!(diagram);
 
@@ -64,8 +65,8 @@ fn dogfood(reduction: Fraction) -> Vec<Fraction> {
     .collect()
 }
 
-fn weight_labels(days: &[Fraction], can_contents: Gram, empty_can: Gram) -> Vec<String> {
-    let weight = |remaining: &Fraction| -> String {
+fn weight_labeller(can_contents: Gram, empty_can: Gram) -> impl Fn(&Fraction) -> String {
+    move |remaining| {
         if *remaining.numer() == 0 {
             String::from("Empty")
         } else {
@@ -75,7 +76,5 @@ fn weight_labels(days: &[Fraction], can_contents: Gram, empty_can: Gram) -> Vec<
                     + can_contents as f32 * (*remaining.numer() as f32 / *remaining.denom() as f32)
             )
         }
-    };
-
-    days.iter().map(weight).collect()
+    }
 }

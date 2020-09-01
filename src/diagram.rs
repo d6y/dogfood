@@ -20,10 +20,8 @@ impl Diagram {
         Diagram::Blank
     }
 
-    pub fn label(text: &String) -> Diagram {
-        Diagram::Label {
-            text: text.to_owned(),
-        }
+    pub fn label(text: String) -> Diagram {
+        Diagram::Label { text: text }
     }
 
     pub fn can() -> Diagram {
