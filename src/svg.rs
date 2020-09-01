@@ -1,74 +1,94 @@
+use crate::diagram::Diagram;
 use svg::node;
 use svg::node::element::path::Data;
 use svg::node::element::Path;
 use svg::Document;
-use super::Fraction;
 
-pub fn draw(filename: &str, days: &Vec<Fraction>, labels: &Vec<String>) {
-    let h_margin = 0;
-    let v_margin = 50;
+pub fn save(diagram: &Diagram, filename: &str) {
+    let (canvas, document) = draw(&diagram, Canvas::blank(), Document::new());
+    let viewbox = format!("-10, -10, {}, {}", canvas.width, canvas.height);
+    svg::save(filename, &document.set("viewBox", viewbox)).unwrap();
+}
 
-    let day_height = 120;
-    let am_width = 90;
+struct Canvas {
+    x: i16,
+    y: i16,
+    width: i16,
+    height: i16,
+}
 
-    let can_height = 60;
-    let can_width = 50;
-
-    let day_origin = |day: usize, am: bool| {
-        if am {
-            (h_margin, day_height * day + v_margin)
-        } else {
-            (h_margin + am_width, day_height * day + v_margin)
+impl Canvas {
+    fn new(x: i16, y: i16, width: i16, height: i16) -> Canvas {
+        Canvas {
+            x,
+            y,
+            width,
+            height,
         }
-    };
-
-    let can = |origin| {
-        let data = Data::new()
-            .move_to(origin)
-            .line_by((can_width, 0))
-            .line_by((0, can_height))
-            .line_by((-can_width, 0))
-            .close();
-
-        let path = Path::new()
-            .set("fill", "none")
-            .set("stroke", "black")
-            .set("stroke-width", 3)
-            .set("d", data);
-
-        path
-    };
-
-    let text_under = |origin, str: &str| {
-        let (x, y) = origin;
-        node::element::Text::new()
-            .set("x", x + (can_width / 2) - (8 * str.len() as i32 / 2)) // TODO: arbitrary, fix for font
-            .set("y", y + (can_height as f32 * 1.3).round() as usize)
-            .add(node::Text::new(str))
-    };
-
-    let mut document = Document::new().set(
-        "viewBox",
-        (
-            0,
-            0,
-            am_width * 2 + h_margin * 2,
-            days.len() * day_height + days.len() + v_margin * 2,
-        ),
-    );
-
-    let mut am = Fraction::new(1,1);
-    for (i, day) in days.iter().enumerate() {
-        let am_origin = day_origin(i, true);
-        let am_can = can(am_origin);
-
-        let pm_origin = day_origin(i, false);
-        let pm_can = can(pm_origin);
-
-        let pm_label = text_under(pm_origin, &labels[i]);
-
-        document = document.add(am_can).add(pm_can).add(pm_label);
     }
 
-    svg::save(filename, &document).unwrap();
+    fn blank() -> Canvas {
+        Canvas {
+            x: 0,
+            y: 0,
+            width: 0,
+            height: 0,
+        }
+    }
+
+    fn grow(self, w: i16, h: i16) -> Canvas {
+        Canvas::new(self.x, self.y, self.width + w, self.height + h)
+    }
+
+    fn reposition(self, x: i16, y: i16) -> Canvas {
+        Canvas::new(x, y, self.width, self.height)
+    }
+}
+
+fn draw(diagram: &Diagram, canvas: Canvas, document: Document) -> (Canvas, Document) {
+    match diagram {
+        Diagram::Blank => (canvas, document),
+        Diagram::Can => rect(canvas, document),
+        Diagram::Label { text } => self::text(canvas, document, text),
+        Diagram::Stack { top, bottom } => {
+            let (canvas, document) = draw(&top, canvas, document);
+            let next_line = canvas.height;
+            draw(&bottom, canvas.reposition(0, next_line), document)
+        }
+    }
+}
+
+fn text(canvas: Canvas, document: Document, label: &str) -> (Canvas, Document) {
+    // NB: text is drawn up from the y baseline
+
+    let _text_width = label.len(); // TODO: need font info for sizing
+    let text_height = 20; // TODO: need font info
+    let text_x_offset = 0; // TODO: for centering, need font info
+
+    let node = node::element::Text::new()
+        .set("x", canvas.x + text_x_offset)
+        .set("y", canvas.y + text_height)
+        .add(node::Text::new(label));
+
+    (canvas.grow(0, text_height * 2), document.add(node))
+}
+
+fn rect(canvas: Canvas, document: Document) -> (Canvas, Document) {
+    let width = 20;
+    let height = 40;
+
+    let data = Data::new()
+        .move_to((canvas.x, canvas.y))
+        .line_by((width, 0))
+        .line_by((0, height))
+        .line_by((-width, 0))
+        .close();
+
+    let path = Path::new()
+        .set("fill", "none")
+        .set("stroke", "black")
+        .set("stroke-width", 2)
+        .set("d", data);
+
+    (canvas.grow(width, height), document.add(path))
 }

@@ -37,7 +37,7 @@ fn main() {
 
     dbg!(diagram);
 
-    // svg::draw("image.svg", &day_fractions, &labels);
+    svg::save(&diagram, "image.svg")
 }
 
 fn dogfood(reduction: Fraction) -> Vec<Fraction> {

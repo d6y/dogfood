@@ -9,10 +9,6 @@ pub enum Diagram {
         top: Box<Diagram>,
         bottom: Box<Diagram>,
     },
-    Pair {
-        left: Box<Diagram>,
-        right: Box<Diagram>,
-    },
 }
 
 impl Diagram {
@@ -26,13 +22,6 @@ impl Diagram {
 
     pub fn can() -> Diagram {
         Diagram::Can
-    }
-
-    pub fn next_to(self, right: Diagram) -> Diagram {
-        Diagram::Pair {
-            left: Box::new(self),
-            right: Box::new(right),
-        }
     }
 
     pub fn above(self, bottom: Diagram) -> Diagram {
