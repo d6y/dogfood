@@ -1,0 +1,14 @@
+<svg viewBox="-10, -10, 60, 240" xmlns="http://www.w3.org/2000/svg">
+<path d="M0,0 l20,0 l0,40 l-20,0 z" fill="none" stroke="black" stroke-width="2"/>
+<text x="0" y="60">
+185g
+</text>
+<path d="M0,80 l20,0 l0,40 l-20,0 z" fill="none" stroke="black" stroke-width="2"/>
+<text x="0" y="140">
+319g
+</text>
+<path d="M0,160 l20,0 l0,40 l-20,0 z" fill="none" stroke="black" stroke-width="2"/>
+<text x="0" y="220">
+Empty
+</text>
+</svg>
