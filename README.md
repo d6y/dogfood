@@ -1,6 +1,6 @@
 # Dogfood
 
-Calculates the expected weight of a can at the end of the day, if you (or your dog) is eating a fraction of a can each day.
+Calculates the expected weight of a can at the end of the day, if you (or your dog) are eating a fraction of a can each day.
 
 # What?
 
