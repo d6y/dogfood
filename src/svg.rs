@@ -4,12 +4,18 @@ use svg::node::element::path::Data;
 use svg::node::element::Path;
 use svg::Document;
 
+// Interpret the diagram into an SVG and save to a file
 pub fn save(diagram: &Diagram, filename: &str) {
     let (canvas, document) = draw(&diagram, Canvas::blank(), Document::new());
     let viewbox = format!("-10, -10, {}, {}", canvas.width, canvas.height);
     svg::save(filename, &document.set("viewBox", viewbox)).unwrap();
 }
 
+// Implementation outline:
+// - As we walk the `diagram`, we draw at the current position (x,y) of the `canvas`.
+// - As we compose parts of the `diagram` we move and expand the `canvas`.
+// The `canvas` keeps our position while we actually update the SVG `document` object.
+// You'll see in the code below we return `(canvas, document)` as we we navigate the diagram.
 struct Canvas {
     x: i16,
     y: i16,
