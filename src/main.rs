@@ -74,7 +74,7 @@ fn dogfood(reduction: Fraction) -> Vec<Fraction> {
         }
     };
 
-    unfold(full_can, move |start| {
+    unfold(full_can, |start| {
         let end = step(start);
         *start = end.clone();
         Some(end)
