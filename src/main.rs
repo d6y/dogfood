@@ -80,7 +80,6 @@ fn dogfood(reduction: Fraction) -> Vec<Fraction> {
         Some(end)
     })
     .take_until(is_empty)
-    .take(100) // safety net on how long this runs for
     .collect()
 }
 
