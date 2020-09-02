@@ -32,6 +32,8 @@ fn main() -> Result<(), std::io::Error> {
     assert!(args.denominator > 0); // avoid divide by zero
     assert!(args.numerator > 0); // must take a reducing step
     assert!(args.numerator <= args.denominator); // must be a fraction of the whole
+    assert!(args.denominator <= args.can_contents); // come off it, you can't seriously be taking 1g from a can
+    assert!(args.can_contents <= 12000); // 12kg limit...enough for you?
 
     let reduction = Fraction::new(args.numerator, args.denominator);
 
