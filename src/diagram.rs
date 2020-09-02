@@ -1,10 +1,11 @@
-#[derive(Debug)]
+use crate::Fraction;
+
 pub enum Diagram {
     Blank,
     Label {
         text: String,
     },
-    Can,
+    Can(Fraction),
     Stack {
         top: Box<Diagram>,
         bottom: Box<Diagram>,
@@ -20,8 +21,8 @@ impl Diagram {
         Diagram::Label { text: text }
     }
 
-    pub fn can() -> Diagram {
-        Diagram::Can
+    pub fn can(fraction: Fraction) -> Diagram {
+        Diagram::Can(fraction)
     }
 
     pub fn above(self, bottom: Diagram) -> Diagram {

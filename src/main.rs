@@ -47,11 +47,15 @@ fn main() {
 
     if let Some(filename) = args.svg {
         // Convert the fractions into a series of stacked cans, each labelled with the end-of-day weight.
-        let row = |weight| -> Diagram { Diagram::can().above(Diagram::label(weight)) };
+        let row = |&weight, text| -> Diagram { Diagram::can(weight).above(Diagram::label(text)) };
 
-        let diagram = weight_labels
+        let diagram = day_fractions
+            .iter()
+            .zip(weight_labels)
             .into_iter()
-            .fold(Diagram::new(), |diagram, weight| diagram.above(row(weight)));
+            .fold(Diagram::new(), |diagram, (fraction, label)| {
+                diagram.above(row(fraction, label))
+            });
 
         // Convert the diagram into an SVG file:
         svg::save(&diagram, &filename)

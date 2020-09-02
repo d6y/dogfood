@@ -54,6 +54,7 @@ dependencies = [
  "itertools",
  "lazy_static",
  "num-rational",
+ "num-traits",
  "structopt",
  "svg",
  "take-until",
