@@ -27,7 +27,7 @@ struct Args {
     denominator: u16,
 }
 
-fn main() {
+fn main() -> Result<(), std::io::Error> {
     let args = Args::from_args();
     assert!(args.denominator > 0); // avoid divide by zero
     assert!(args.numerator > 0); // must take a reducing step
@@ -45,20 +45,24 @@ fn main() {
         println!("End of day {}: {} left over, {}", 1 + i, day, label);
     }
 
-    if let Some(filename) = args.svg {
-        // Convert the fractions into a series of stacked cans, each labelled with the end-of-day weight.
-        let row = |&weight, text| -> Diagram { Diagram::can(weight).above(Diagram::label(text)) };
+    match args.svg {
+        None => Ok(()),
+        Some(filename) => {
+            // Convert the fractions into a series of stacked cans, each labelled with the end-of-day weight.
+            let row =
+                |&weight, text| -> Diagram { Diagram::can(weight).above(Diagram::label(text)) };
 
-        let diagram = day_fractions
-            .iter()
-            .zip(weight_labels)
-            .into_iter()
-            .fold(Diagram::new(), |diagram, (fraction, label)| {
-                diagram.above(row(fraction, label))
-            });
+            let diagram = day_fractions
+                .iter()
+                .zip(weight_labels)
+                .into_iter()
+                .fold(Diagram::new(), |diagram, (fraction, label)| {
+                    diagram.above(row(fraction, label))
+                });
 
-        // Convert the diagram into an SVG file:
-        svg::save(&diagram, &filename)
+            // Convert the diagram into an SVG file:
+            svg::save(&diagram, &filename)
+        }
     }
 }
 

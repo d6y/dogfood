@@ -8,10 +8,10 @@ use svg::node::element::Rectangle;
 use svg::Document;
 
 // Interpret the diagram into an SVG and save to a file
-pub fn save(diagram: &Diagram, filename: &str) {
+pub fn save(diagram: &Diagram, filename: &str) -> Result<(), std::io::Error> {
     let (canvas, document) = draw(&diagram, Canvas::blank(), Document::new());
     let viewbox = format!("-10, -10, {}, {}", canvas.width, canvas.height);
-    svg::save(filename, &document.set("viewBox", viewbox)).unwrap();
+    svg::save(filename, &document.set("viewBox", viewbox))
 }
 
 // Implementation outline:
